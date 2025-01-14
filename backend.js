@@ -23,7 +23,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Connect to MongoDB (Replace with your MongoDB connection string)
-mongoose.connect('mongodb+srv://ayanokojix:ejwRyGJ5Yieow4VK@cluster0.1rruy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
