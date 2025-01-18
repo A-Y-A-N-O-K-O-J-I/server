@@ -132,6 +132,29 @@ app.get('/balance/:username', async (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 });
+//update balance
+app.post('/update-balance', async (req, res) => {
+    const { username, amount } = req.body;
+
+    if (!username || typeof amount !== 'number') {
+        return res.status(400).json({ message: 'Invalid input.' });
+    }
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        user.tokens += amount; // Add coins
+        await user.save();
+
+        res.status(200).json({ message: 'Balance updated successfully.', tokens: user.tokens });
+    } catch (error) {
+        console.error('Error updating balance:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
 
 // Start the server
 app.listen(PORT, () => {
