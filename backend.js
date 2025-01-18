@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    tokens: { type: Number, default: 0 }, // New field for coin balance
+    tokens: { type: Number, default: 200 }, // New field for coin balance
 });
 
 // Create a Mongoose model
@@ -116,8 +116,22 @@ app.post('/login', async (req, res) => {
     }
 });
 
+//check balance server
+app.get('/balance/:username', async (req, res) => {
+    const { username } = req.params;
 
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
 
+        res.status(200).json({ tokens: user.tokens });
+    } catch (error) {
+        console.error('Error fetching balance:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
 
 // Start the server
 app.listen(PORT, () => {
