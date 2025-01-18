@@ -37,7 +37,8 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // Store hashed password
+    password: { type: String, required: true },
+    tokens: { type: Number, default: 0 }, // New field for coin balance
 });
 
 // Create a Mongoose model
@@ -114,6 +115,9 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 });
+
+
+
 
 // Start the server
 app.listen(PORT, () => {
